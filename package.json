@@ -1,0 +1,35 @@
+{
+  "name": "inflab-pretest",
+  "version": "1.0.0",
+  "description": "인프랩 사전과제",
+  "private": true,
+  "scripts": {
+    "start": "export SERVER_ENV=prod && npm run build && node bin/www",
+    "dev": "export SERVER_ENV=dev && nodemon bin/www_dev --exec babel-node --presets @babel/preset-env",
+    "build": "npm run clean && babel src -d dist",
+    "lint": "eslint src",
+    "clean": "rm -rf dist",
+    "test": "NODE_ENV=test ./node_modules/.bin/jest tests --coverage"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "http-status": "^1.5.3",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.20",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.2",
+    "@babel/node": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "babel-core": "^6.26.3",
+    "eslint": "^8.27.0",
+    "eslint-config-airbnb-base": "^15.0.0"
+  }
+}
