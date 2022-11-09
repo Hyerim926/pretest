@@ -64,6 +64,19 @@ const customError = (req, error) => {
     logger.error(errorObj);
 };
 
+const sqlError = (error) => {
+    const errorObj = {
+        code: error.code,
+        errorNo: error.errno,
+        sql: error.sql,
+        state: error.sqlState,
+        message: error.message,
+    };
+
+    logger.error(errorObj);
+
+    return { success: false, message: errorObj };
+};
 // Production 환경이 아닌 경우(dev 등)
 if (process.env.SERVER_ENV === 'dev') {
     logger.add(new winston.transports.Console({
@@ -79,5 +92,5 @@ if (process.env.SERVER_ENV === 'dev') {
     }));
 }
 export {
-    logger, stream, customError,
+    logger, stream, customError, sqlError,
 };
