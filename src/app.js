@@ -9,7 +9,7 @@ import dbSetting from './configs/database';
 
 const app = express();
 
-dbSetting.dbInit();
+dbSetting.dbInit().then((r) => r);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
