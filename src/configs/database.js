@@ -31,15 +31,17 @@ const executeQuery = async (sql) => {
         const connection = await pool.getConnection(async (conn) => conn);
         try {
             const [rows] = await connection.query(sql);
+            // TODO: logger 붙이기
+            console.log(sql);
             connection.release();
             return rows;
         } catch (error) {
             connection.release();
-            return sqlError(error);
+            throw error;
         }
     } catch (error) {
         console.log('DB Error');
-        return sqlError(error);
+        throw error;
     }
 };
 

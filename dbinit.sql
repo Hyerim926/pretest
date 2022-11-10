@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `lecture` (
     `name` varchar(20) not null,
     `category` varchar(10) not null,
     `teacher_id` int(11) not null,
-    `introduction` text,
+    `introduction` text not null,
     `fee` int(11) not null,
     `s_open` char not null default 'N',
     `s_delete` char not null default 'N',
