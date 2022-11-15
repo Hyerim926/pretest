@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise';
 import fs from 'fs';
-import { sqlError } from './winston';
 
 const dbInit = async () => {
     const pool = mysql.createPool({
@@ -19,10 +18,10 @@ const dbInit = async () => {
             return rows;
         } catch (error) {
             connection.release();
-            return sqlError(error);
+            throw error;
         }
     } catch (error) {
-        return sqlError(error);
+        throw error;
     }
 };
 
@@ -37,18 +36,14 @@ const executeQuery = async (sql) => {
         queueLimit: 0,
     });
 
+    const connection = await pool.getConnection(async (conn) => conn);
     try {
-        const connection = await pool.getConnection(async (conn) => conn);
-        try {
-            const [rows] = await connection.query(sql);
-            connection.release();
-            return rows;
-        } catch (error) {
-            connection.release();
-            return sqlError(error);
-        }
+        const [rows] = await connection.query(sql);
+        connection.release();
+        return rows;
     } catch (error) {
-        return sqlError(error);
+        connection.release();
+        throw error;
     }
 };
 
