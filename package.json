@@ -4,12 +4,12 @@
   "description": "인프랩 사전과제",
   "private": true,
   "scripts": {
-    "start": "export SERVER_ENV=prod && npm run build && node bin/www",
-    "dev": "export SERVER_ENV=dev && nodemon bin/www_dev --exec babel-node --presets @babel/preset-env",
+    "start": "export SERVER_ENV=prod && npm run build && node src/app.js",
+    "dev": "export SERVER_ENV=dev && nodemon src/app.js --exec babel-node --presets @babel/preset-env",
     "build": "npm run clean && babel src -d dist",
     "lint": "eslint src",
     "clean": "rm -rf dist",
-    "test": "jest"
+    "test": "export SERVER_ENV=test && jest"
   },
   "dependencies": {
     "@js-joda/core": "^5.4.2",
