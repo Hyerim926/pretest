@@ -1,12 +1,12 @@
-CREATE DATABASE IF NOT EXISTS `inflab` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `inflab_dev` default CHARACTER SET UTF8;
 
-USE `inflab`;
+USE `inflab_dev`;
 
 CREATE TABLE IF NOT EXISTS `teacher` (
     `id` int(11) not null auto_increment,
     `name` varchar(20) not null,
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `lecture` (
     `id` int(11) not null auto_increment,

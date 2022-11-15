@@ -2,16 +2,16 @@ import mysql from 'mysql2/promise';
 import fs from 'fs';
 import { sqlError } from './winston';
 
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PW,
-    multipleStatements: true, // this allow you to run multiple queries at once.
-});
-
 const dbInit = async () => {
+    const pool = mysql.createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PW,
+        multipleStatements: true,
+    });
+
     try {
-        const sql = fs.readFileSync('./dbinit.sql').toString();
+        const sql = process.env.SERVER_ENV === 'prod' ? fs.readFileSync('./dbinit.sql').toString() : fs.readFileSync('./dbinit-dev.sql').toString();
         const connection = await pool.getConnection(async (conn) => conn);
         try {
             const [rows] = await connection.query(sql);
@@ -27,21 +27,28 @@ const dbInit = async () => {
 };
 
 const executeQuery = async (sql) => {
+    const pool = mysql.createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PW,
+        database: process.env.DB_NAME,
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+    });
+
     try {
         const connection = await pool.getConnection(async (conn) => conn);
         try {
             const [rows] = await connection.query(sql);
-            // TODO: logger 붙이기
-            console.log(sql);
             connection.release();
             return rows;
         } catch (error) {
             connection.release();
-            throw error;
+            return sqlError(error);
         }
     } catch (error) {
-        console.log('DB Error');
-        throw error;
+        return sqlError(error);
     }
 };
 

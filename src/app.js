@@ -1,53 +1,34 @@
-import createError from 'http-errors';
 import express from 'express';
 import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
-import { customError, stream } from './configs/winston';
-import customResponse from './utils/apiResponse';
+import bodyParser from 'body-parser';
+import Path from 'path';
 import v1Route from './routes/v1';
-import dbSetting from './configs/database';
+import dbAccess from './configs/database';
+
+const DOT_ENV_PATH = Path.join(process.cwd(), 'envs', `${process.env.SERVER_ENV}.env`);
+
+// 공통 .env
+require('dotenv').config();
+// 환경별 env
+require('dotenv').config({ path: DOT_ENV_PATH });
+
+if (process.env.SERVER_ENV !== 'test') {
+    dbAccess.dbInit().then((r) => r);
+}
 
 const app = express();
 
-dbSetting.dbInit().then((r) => r);
+if (process.env.SERVER_ENV !== 'test') {
+    app.use(morgan('dev'));
+}
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-app.use(cookieParser());
-
-app.use(morgan('combined', {
-    skip(req, res) {
-        return res.statusCode >= 400;
-    },
-    stream,
-
-}));
-
-// app.set('trust proxy', 1);
 app.use('/v1', v1Route);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-    next(createError(404));
+app.listen(8000, () => {
+    console.log('Server is running on 8000 port');
 });
 
-// error handler
-app.use((err, req, res, next) => {
-    let error = err;
-
-    if (!err.status) {
-        error = createError(403, '[EIP999] 예기치 못한 오류가 발생하였습니다.');
-
-    }
-
-    customError(req, err);
-
-    // render the error page
-    return customResponse(res, {
-        message: `[EIP${error.status}] ${error.message}`,
-    }, error.status, error, req);
-});
-
-// bin/www 를 그대로 사용하기 위해서 예외적으로 commonJs 문법을 적용
 module.exports = app;
