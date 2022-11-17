@@ -13,10 +13,14 @@ class StudentService {
 
     async withdraw(studentId) {
         await this.studentRepository.deleteStudent(studentId);
+        await this.studentRepository.updateEnrolmentStatus(studentId);
     }
 
     async enrolLecture(enrolReq) {
-        await this.studentRepository.enrollLecture(enrolReq);
+        const isJoined = await this.studentRepository.isJoined(enrolReq.studentId);
+        if (isJoined) {
+            await this.studentRepository.enrollLecture(enrolReq);
+        }
     }
 }
 
