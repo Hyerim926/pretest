@@ -2,15 +2,22 @@ import 'reflect-metadata';
 import { Container } from 'typedi';
 import lectureRepository from '../repository/lecture.repository';
 
-class ExampleClass {
-    print() {
-        console.log('I am alive!');
-    }
-}
-
 class LectureService {
     constructor() {
         this.lectureRepository = lectureRepository;
+    }
+
+    async getLectureByOne(lectureId) {
+        const isExist = await this.lectureRepository.isExist(lectureId);
+
+        if (isExist) {
+            const lectureInfo = await this.lectureRepository.getInfoByOneLecture(lectureId);
+            const studentList = await this.lectureRepository.getStudentInfoByOneLecture(lectureId);
+
+            return { lectureInfo, studentList };
+        }
+
+        throw new Error('no data for request');
     }
 
     async addLecture(lectureReq) {
@@ -29,14 +36,17 @@ class LectureService {
         const studentCount = await this.lectureRepository.checkStudent(lectureId);
 
         if (studentCount > 0) {
-            await this.lectureRepository.deleteLecture(lectureId);
-        } else {
             throw new Error('existence of student');
+        } else {
+            await this.lectureRepository.deleteLecture(lectureId);
         }
+    }
+
+    async updateInfoLecture(id, lectureReq) {
+        await this.lectureRepository.updateInfo(id, lectureReq);
     }
 }
 
-Container.set({ id: ExampleClass, type: ExampleClass });
 Container.set({ id: LectureService, type: LectureService });
 
-export { ExampleClass, LectureService };
+export default LectureService;
