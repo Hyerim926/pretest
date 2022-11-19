@@ -5,6 +5,21 @@ import LectureService from '../service/lecture.service';
 const classInstance = Container.get(LectureService);
 
 export default {
+    searchLecture: async (req, res) => {
+        try {
+            console.log(req.query.keyword, req.query.page, req.query.category);
+            const result = await classInstance.searchLectures(req.query.keyword, req.query.page, req.query.category);
+
+            if (result.length > 0) {
+                return apiResponse(res, { result }, 200);
+            }
+            return apiResponse(res, { message: '조회 결과가 없습니다' }, 200);
+        } catch (error) {
+            console.log(error);
+            return apiResponse(res, { code: 'EIP900', message: process.env.DEFAULT_ERROR_MESSAGE }, 501, error, req);
+        }
+    },
+
     getLectureInfo: async (req, res) => {
         try {
             const result = await classInstance.getLectureByOne(req.params.id);

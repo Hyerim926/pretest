@@ -2,6 +2,31 @@ import { LocalDateTime } from '@js-joda/core';
 import dbAccess from '../configs/database';
 
 export default {
+    searchLecture: async (keyword, page, category) => {
+        if (!page) page = 1;
+        const limit = 10;
+        const offset = (page - 1) * limit;
+
+        let sql = '';
+        sql += 'SELECT l.id as \'lecture_id\', l.category as \'category\', l.name as \'lecture_name\',';
+        sql += 't.name as \'teacher_name\', COUNT(CASE WHEN s.s_withdraw = \'N\' AND e.s_delete =\'N\' THEN 1 END) as \'studentNum\', l.created_at ';
+        sql += 'FROM LECTURE l LEFT JOIN ENROLMENT e ON (l.id = e.lecture_id and e.s_delete = \'N\') ';
+        sql += 'LEFT JOIN TEACHER t ON l.teacher_id = t.id ';
+        sql += 'LEFT JOIN STUDENT s ON e.student_id = s.id ';
+        sql += 'WHERE ';
+        if (category) sql += `l.category = '${category}' AND `;
+        sql += 'l.s_open = \'Y\' AND l.s_delete = \'N\' AND ';
+        sql += `(l.name LIKE '%${keyword}%' OR t.name LIKE '%${keyword}%'`;
+        if (typeof keyword === 'number') sql += `OR e.student_id = ${keyword}`;
+        sql += ') GROUP BY l.id ';
+        sql += `ORDER BY l.created_at DESC, COUNT(e.student_id) DESC LIMIT ${offset}, ${limit}`;
+
+        console.log(sql);
+        const result = await dbAccess.executeQuery(sql);
+
+        return result;
+    },
+
     isExist: async (lectureId) => {
         const sql = `SELECT id FROM LECTURE WHERE id = ${lectureId}`;
 

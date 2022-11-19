@@ -7,6 +7,10 @@ class LectureService {
         this.lectureRepository = lectureRepository;
     }
 
+    async searchLectures(keyword, page, category) {
+        return await this.lectureRepository.searchLecture(keyword, page, category);
+    }
+
     async getLectureByOne(lectureId) {
         const isExist = await this.lectureRepository.isExist(lectureId);
 

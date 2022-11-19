@@ -7,12 +7,19 @@ describe('POST /v1/lecture', () => {
         await dbAccess.dbInit();
     });
 
+    test('강의 검색', async () => {
+        const response = await request(app).get(encodeURI('/v1/lecture/search?keyword=강의&category=웹'));
+
+        expect(response.status).toEqual(200);
+        expect(response.body.success).toEqual(true);
+        console.log(response.body.data);
+    });
+
     test.skip('강의 조회 API', async () => {
         const response = await request(app).get('/v1/lecture/1');
 
         expect(response.status).toEqual(200);
         expect(response.body.success).toEqual(true);
-        console.log(response.body);
     });
 
     test.skip('강의 생성 API', async () => {
@@ -136,7 +143,7 @@ describe('POST /v1/lecture', () => {
         expect(response.body.data.message).toEqual('중복된 강의명이 있어 강의 등록이 불가능합니다');
     });
 
-    test('강의 다수 생성 시 배열 길이가 1일 때', async () => {
+    test.skip('강의 다수 생성 시 배열 길이가 1일 때', async () => {
         const response = await request(app)
             .post('/v1/lecture/bulk')
             .send([

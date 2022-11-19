@@ -4,6 +4,8 @@ import { lectureValidation } from '../../middlewares/validator.middleware';
 
 const router = express.Router();
 
+router.route('/search').get(lectureController.searchLecture);
+
 router.route('/:id').get(lectureController.getLectureInfo);
 
 router.route('/').post(lectureValidation.addLecture, lectureController.addLectureByOne);
