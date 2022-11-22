@@ -57,6 +57,7 @@
 
 #### 강의 관련 API
 ![img-lecture-result.png](images/img-lecture-result.png)
+![img-lecture-result2.png](images/img-lecture-result2.png)
 
 #### 학생 관련 API
 ![img-student-result.png](images/img-student-result.png)
