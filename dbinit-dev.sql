@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `lecture` (
 CREATE TABLE IF NOT EXISTS `student` (
     `id` int(11) not null auto_increment,
     `nickname` varchar(20) not null,
-    `email` varchar(20) not null,
+    `email` varchar(50) not null,
     `s_withdraw` char not null default 'N',
     `created_at` datetime not null default now(),
     `updated_at` datetime,
