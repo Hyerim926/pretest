@@ -1,0 +1,40 @@
+### SignUp
+# author: hey
+# parameter :
+# [S] nickname : 닉네임 (O)
+# [S] email : 이메일 (O)
+# description : 회원가입하기
+POST {{host}}/v1/lecture
+Accept: application/json
+Content-Type: application/json
+
+{
+  "nickname": "hey",
+  "email": "hey@gmail.com"
+}
+
+### Enrol Lecture
+# author: hey
+# parameter :
+# [A] lecture : 강의 아이디 배열 (O)
+# [N] studentId : 학생 아이디 (O)
+# description : 수강신청하기
+POST {{host}}/v1/lecture
+Accept: application/json
+Content-Type: application/json
+
+{
+  "lecture": [2],
+  "studentId": 1
+}
+
+### Withdraw
+# author : hey
+# parameter :
+# description : 회원 탈퇴하기
+PUT {{host}}/v1/student/withdraw/1
+Accept: application/json
+Content-Type: application/json
+
+
+

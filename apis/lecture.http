@@ -1,0 +1,109 @@
+### Add One Lecture
+# author : hey
+# parameter :
+# [S] name : 강의명 (O)
+# [S] category : 카테고리 (O)
+# [N] teacher_id : 강사명 (O)
+# [S] introduction : 강의소개 (O)
+# [N] fee : 강의명 (O)
+# description : 강의 하나 생성하기
+POST {{host}}/v1/lecture
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Node.js 시작하기",
+  "category": "웹",
+  "teacher_id": 1,
+  "introduction": "Node.js로 서버 개발하는 법을 배웁니다",
+  "fee": 45000
+}
+
+### Add Several Lectures
+# author : hey
+# parameter :
+# [S] name : 강의명 (O)
+# [S] category : 카테고리 (O)
+# [N] teacher_id : 강사명 (O)
+# [S] introduction : 강의소개 (O)
+# [N] fee : 강의명 (O)
+# description : 강의 다수 생성하기
+POST {{host}}/v1/lecture
+Accept: application/json
+Content-Type: application/json
+
+[{
+  "name": "강의 1",
+  "category": "웹",
+  "teacher_id": 1,
+  "introduction": "1번 강의입니다",
+  "fee": 45000
+}, {
+    "name": "강의 2",
+    "category": "앱",
+    "teacher_id": 2,
+    "introduction": "2번 강의입니다",
+    "fee": 45000
+  },
+  {
+    "name": "강의 3",
+    "category": "웹",
+    "teacher_id": 1,
+    "introduction": "3번 강의입니다",
+    "fee": 45000
+  },
+  {
+    "name": "강의 4",
+    "category": "데이터베이스",
+    "teacher_id": 3,
+    "introduction": "4번 강의입니다",
+    "fee": 45000
+  }]
+
+### Modify Lecture's Info
+# author : hey
+# parameter : 셋 중 하나는 있어야함
+# [S] name : 강의명 (X)
+# [S] introduction : 강의소개 (X)
+# [N] fee : 강의명 (X)
+# description : 강의 수정하기
+PUT {{host}}/v1/lecture/2
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "수정된 강의명",
+  "fee":50000
+}
+
+### Open Lecture
+# author : hey
+# parameter :
+# description : 강의 오픈하기
+PUT {{host}}/v1/lecture/active/3
+Accept: application/json
+Content-Type: application/json
+
+### Delete Lecture
+# author : hey
+# parameter :
+# description : 강의 삭제하기
+DELETE {{host}}/v1/lecture/disable/3
+Accept: application/json
+Content-Type: application/json
+
+### Search by keyword
+# author : hey
+# parameter :
+# description : 강의 검색하기
+GET {{host}}/v1/lecture/search?keyword=Node
+Accept: application/json
+Content-Type: application/json
+
+### Search by lectureId
+# author : hey
+# parameter :
+# description : 강의 조회하기
+GET {{host}}/v1/lecture/1
+Accept: application/json
+Content-Type: application/json
