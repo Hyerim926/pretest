@@ -7,7 +7,6 @@ const classInstance = Container.get(LectureService);
 export default {
     searchLecture: async (req, res) => {
         try {
-            console.log(req.query.keyword, req.query.page, req.query.category);
             const result = await classInstance.searchLectures(req.query.keyword, req.query.page, req.query.category);
 
             if (result.length > 0) {
@@ -15,7 +14,6 @@ export default {
             }
             return apiResponse(res, { message: '조회 결과가 없습니다' }, 200);
         } catch (error) {
-            console.log(error);
             return apiResponse(res, { code: 'EIP900', message: process.env.DEFAULT_ERROR_MESSAGE }, 501, error, req);
         }
     },
@@ -27,7 +25,7 @@ export default {
             return apiResponse(res, { result }, 200);
         } catch (error) {
             if (error.message === 'no data for request') {
-                return apiResponse(res, { code: 'EIP901', message: '조회되는 강의가 없습니다' }, 400, error, req);
+                return apiResponse(res, { message: '조회되는 강의가 없습니다' }, 200);
             }
 
             return apiResponse(res, { code: 'EIP901', message: process.env.DEFAULT_ERROR_MESSAGE }, 501, error, req);
@@ -49,7 +47,7 @@ export default {
             return apiResponse(res, { message: '강의 등록이 완료되었습니다', data: lectureReq }, 200);
         } catch (error) {
             if (error.code === 'ER_DUP_ENTRY') {
-                return apiResponse(res, { code: 'EIP902', message: '중복된 강의명이 있어 강의 등록이 불가능합니다' }, 400, error, req);
+                return apiResponse(res, { message: '중복된 강의명이 있어 강의 등록이 불가능합니다' }, 400);
             }
             return apiResponse(res, { code: 'EIP902', message: process.env.DEFAULT_ERROR_MESSAGE }, 501, error, req);
         }
@@ -61,9 +59,8 @@ export default {
 
             return apiResponse(res, { message: '강의 등록이 완료되었습니다', data: req.body }, 200);
         } catch (error) {
-            console.log(error);
             if (error.message.includes('Duplicate entry')) {
-                return apiResponse(res, { code: 'EIP903', message: '중복된 강의명이 있어 강의 등록이 불가능합니다' }, 400, error, req);
+                return apiResponse(res, { message: '중복된 강의명이 있어 강의 등록이 불가능합니다' }, 400);
             }
             return apiResponse(res, { code: 'EIP903', message: process.env.DEFAULT_ERROR_MESSAGE }, 501, error, req);
         }
@@ -101,7 +98,7 @@ export default {
             return apiResponse(res, { message: '강의 삭제가 완료되었습니다', data: lectureId }, 200);
         } catch (error) {
             if (error.message === 'existence of student') {
-                return apiResponse(res, { code: 'EIP905', message: '이미 수강 중인 학생이 있어 강의 삭제가 불가능합니다' }, 400, error, req);
+                return apiResponse(res, { message: '이미 수강 중인 학생이 있어 강의 삭제가 불가능합니다' }, 400);
             }
             return apiResponse(res, { code: 'EIP906', message: process.env.DEFAULT_ERROR_MESSAGE }, 501, error, req);
         }
