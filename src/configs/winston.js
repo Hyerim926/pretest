@@ -42,12 +42,8 @@ const stream = {
 };
 
 const customError = (req, error) => {
-
-    const userId = req.body.user_id;
-
     const errorObj = {
         url: `[${req.method}] ${req.headers.host}${req.originalUrl}`,
-        userId,
         error: {
             message: error.message,
             stack: error.stack,
@@ -74,9 +70,8 @@ const sqlError = (error) => {
     };
 
     logger.error(errorObj);
-
-    return { success: false, message: errorObj };
 };
+
 // Production 환경이 아닌 경우(dev 등)
 if (process.env.SERVER_ENV === 'dev') {
     logger.add(new winston.transports.Console({
@@ -87,7 +82,6 @@ if (process.env.SERVER_ENV === 'dev') {
             }),
             winston.format.prettyPrint({ colorize: 'true' }),
             winston.format.align(),
-            // winston.format.cli(),
         ),
     }));
 }
