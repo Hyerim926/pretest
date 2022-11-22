@@ -2,7 +2,7 @@ import request from 'supertest';
 import dbAccess from '../configs/database';
 import app from '../app';
 
-describe('POST /v1/student', () => {
+describe('student', () => {
     beforeAll(async () => {
         await dbAccess.dbInit();
     });
