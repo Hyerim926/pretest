@@ -1,4 +1,3 @@
-import createError from 'http-errors';
 import { customError } from '../configs/winston';
 
 const httpStatus = require('http-status');
@@ -10,9 +9,6 @@ export default (res, data = {}, code = httpStatus.OK, error, req) => {
     if (code === httpStatus.OK) {
         success = true;
     }
-    // let result = {
-    //     success: true,
-    // };
 
     // error
     if (error !== undefined) {
