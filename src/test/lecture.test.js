@@ -7,28 +7,13 @@ describe('lecture', () => {
         await dbAccess.dbInit();
     });
 
-    test('강의 검색', async () => {
-        const response = await request(app).get(encodeURI('/v1/lecture/search?keyword=강의&category=웹'));
-
-        expect(response.status).toEqual(200);
-        expect(response.body.success).toEqual(true);
-        console.log(response.body.data);
-    });
-
-    test.skip('강의 조회 API', async () => {
-        const response = await request(app).get('/v1/lecture/1');
-
-        expect(response.status).toEqual(200);
-        expect(response.body.success).toEqual(true);
-    });
-
-    test.skip('강의 생성 API', async () => {
+    test('강의 생성 API | 성공 200', async () => {
         const response = await request(app).post('/v1/lecture')
             .send({
-                name: '테스트강의 2',
+                name: 'Node.js 시작하기',
                 category: '웹',
-                teacher_id: 3,
-                introduction: '테스트강의 2',
+                teacher_id: 1,
+                introduction: 'Node.js로 서버 개발하는 법을 배웁니다',
                 fee: 45000,
             });
 
@@ -37,7 +22,7 @@ describe('lecture', () => {
         expect(response.body.data.message).toEqual('강의 등록이 완료되었습니다');
     });
 
-    test.skip('이미 있는 강의인 경우 에러', async () => {
+    test('강의 생성 API | 이미 있는 강의인 경우 | 에러 400', async () => {
         const response = await request(app).post('/v1/lecture')
             .send({
                 name: 'Node.js 시작하기',
@@ -48,11 +33,11 @@ describe('lecture', () => {
             });
 
         expect(response.status).toEqual(400);
-        expect(response.body.success).toEqual(true);
+        expect(response.body.success).toEqual(false);
         expect(response.body.data.message).toEqual('중복된 강의명이 있어 강의 등록이 불가능합니다');
     });
 
-    test.skip('body 객체의 데이터 타입이 맞지 않을 때', async () => {
+    test('강의 생성 API | body 객체의 데이터 타입이 맞지 않는 경우 | 에러 400', async () => {
         const response = await request(app).post('/v1/lecture')
             .send({
                 name: 123,
@@ -67,7 +52,7 @@ describe('lecture', () => {
         expect(response.body.data.message).toEqual('올바르지 않은 데이터 형식입니다');
     });
 
-    test.skip('강의 다수 생성 API', async () => {
+    test('강의 다수 생성 API | 성공 200', async () => {
         const response = await request(app)
             .post('/v1/lecture/bulk')
             .send([
@@ -105,7 +90,7 @@ describe('lecture', () => {
         expect(response.body.data.message).toEqual('강의 등록이 완료되었습니다');
     });
 
-    test.skip('강의 다수 생성 시 중복 강의명이 있을 경우', async () => {
+    test('강의 다수 생성 API | 강의 다수 생성 시 중복 강의명이 있을 경우 | 에러 400', async () => {
         const response = await request(app)
             .post('/v1/lecture/bulk')
             .send([
@@ -139,11 +124,11 @@ describe('lecture', () => {
                 },
             ]);
         expect(response.status).toEqual(400);
-        expect(response.body.success).toEqual(true);
+        expect(response.body.success).toEqual(false);
         expect(response.body.data.message).toEqual('중복된 강의명이 있어 강의 등록이 불가능합니다');
     });
 
-    test.skip('강의 다수 생성 시 배열 길이가 1일 때', async () => {
+    test('강의 다수 생성 API | 강의 다수 생성 시 배열 길이가 1인 경우 | 성공 200', async () => {
         const response = await request(app)
             .post('/v1/lecture/bulk')
             .send([
@@ -159,7 +144,7 @@ describe('lecture', () => {
         expect(response.body.data.message).toEqual('강의 등록이 완료되었습니다');
     });
 
-    test.skip('강의 다수 생성 시 10개 초과일 때', async () => {
+    test('강의 다수 생성 API | 강의 다수 생성 시 10개 초과인 경우 | 에러 400', async () => {
         const response = await request(app)
             .post('/v1/lecture/bulk')
             .send([{
@@ -244,8 +229,23 @@ describe('lecture', () => {
         expect(response.body.data.message).toEqual('한 번에 등록 가능한 강의 수는 10개 입니다');
     });
 
-    test.skip('강의 프로퍼티 하나만 수정 API', async () => {
-        const response = await request(app).put('/v1/lecture/2')
+    test('강의 검색 API | 성공 200', async () => {
+        const response = await request(app).get(encodeURI('/v1/lecture/search?keyword=강의&category=웹'));
+
+        expect(response.status).toEqual(200);
+        expect(response.body.success).toEqual(true);
+        console.log(response.body.data);
+    });
+
+    test('강의 조회 API | 성공 200', async () => {
+        const response = await request(app).get('/v1/lecture/1');
+
+        expect(response.status).toEqual(200);
+        expect(response.body.success).toEqual(true);
+    });
+
+    test('강의 수정 API | 프로퍼티 하나만 수정하는 경우 | 성공 200', async () => {
+        const response = await request(app).put('/v1/lecture/1')
             .send({
                 name: '제목 수정',
             });
@@ -255,8 +255,8 @@ describe('lecture', () => {
         expect(response.body.data.message).toEqual('강의 수정이 완료되었습니다');
     });
 
-    test.skip('강의 프로퍼티 2개 이상 수정 API', async () => {
-        const response = await request(app).put('/v1/lecture/2')
+    test('강의 수정 API | 프로퍼티 2개 이상 수정하는 경우 | 성공 200', async () => {
+        const response = await request(app).put('/v1/lecture/1')
             .send({
                 name: '제목 수정',
                 fee: 50000,
@@ -267,8 +267,8 @@ describe('lecture', () => {
         expect(response.body.data.message).toEqual('강의 수정이 완료되었습니다');
     });
 
-    test.skip('강의 프로퍼티 데이터 타입이 맞지 않을 때', async () => {
-        const response = await request(app).put('/v1/lecture/2')
+    test('강의 수정 API | 강의 프로퍼티 데이터 타입이 맞지 않는 경우 | 에러 400', async () => {
+        const response = await request(app).put('/v1/lecture/1')
             .send({
                 name: '제목 수정',
                 fee: '5만원',
@@ -279,24 +279,24 @@ describe('lecture', () => {
         expect(response.body.data.message).toEqual('올바르지 않은 데이터 형식입니다');
     });
 
-    test.skip('강의 오픈 API', async () => {
-        const response = await request(app).put('/v1/lecture/active/3');
+    test('강의 오픈 API | 성공 200', async () => {
+        const response = await request(app).put('/v1/lecture/active/1');
 
         expect(response.status).toEqual(200);
         expect(response.body.success).toEqual(true);
         expect(response.body.data.message).toEqual('강의 오픈이 완료되었습니다');
     });
 
-    test.skip('강의 삭제 API', async () => {
-        const response = await request(app).put('/v1/lecture/disable/29');
+    test('강의 삭제 API | 성공 200', async () => {
+        const response = await request(app).put('/v1/lecture/disable/3');
 
         expect(response.status).toEqual(200);
         expect(response.body.success).toEqual(true);
         expect(response.body.data.message).toEqual('강의 삭제가 완료되었습니다');
     });
 
-    test.skip('강의 삭제 API | 이미 수강생이 있는 강의인 경우 삭제 불가능', async () => {
-        const response = await request(app).put('/v1/lecture/disable/2');
+    test.skip('강의 삭제 API | 이미 수강생이 있는 강의인 경우 | 에러 400', async () => {
+        const response = await request(app).put('/v1/lecture/disable/1');
 
         expect(response.status).toEqual(400);
         expect(response.body.success).toEqual(true);

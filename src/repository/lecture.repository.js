@@ -21,7 +21,6 @@ export default {
         sql += ') GROUP BY l.id ';
         sql += `ORDER BY l.created_at DESC, COUNT(e.student_id) DESC LIMIT ${offset}, ${limit}`;
 
-        console.log(sql);
         const result = await dbAccess.executeQuery(sql);
 
         return result;

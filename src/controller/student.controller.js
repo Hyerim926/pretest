@@ -17,7 +17,7 @@ export default {
             return apiResponse(res, { message: '회원가입이 완료되었습니다', data: studentReq }, 200);
         } catch (error) {
             if (error.message.includes('Duplicate entry')) {
-                return apiResponse(res, { message: '중복된 이메일이 있습니다 다른 이메일을 사용해주세요' }, 400, error, req);
+                return apiResponse(res, { message: '중복된 이메일이 있습니다 다른 이메일을 사용해주세요' }, 400);
             }
             return apiResponse(res, { code: 'EIP800', message: process.env.DEFAULT_ERROR_MESSAGE }, 501, error, req);
         }
