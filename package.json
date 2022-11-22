@@ -4,7 +4,8 @@
   "description": "인프랩 사전과제",
   "private": true,
   "scripts": {
-    "start": "export SERVER_ENV=dev && babel-node --presets @babel/preset-env src/app.js",
+    "start": "export SERVER_ENV=prod && babel-node --presets @babel/preset-env src/app.js",
+    "dev": "export SERVER_ENV=dev && nodemon src/app.js --exec babel-node --presets @babel/preset-env",
     "test": "export SERVER_ENV=test && jest"
   },
   "dependencies": {
