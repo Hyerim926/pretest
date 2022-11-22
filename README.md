@@ -10,7 +10,7 @@
 <summary>디렉토리 구조</summary>
 <div markdown="1">
 
-![img.png](img-structure.png)
+![img.png](images/img-structure.png)
 
 - `./apis` 폴더는 env에 따른 다른 host 설정파일과 http 파일들로 구성하였습니다.
 - `*.sql` 파일들은 DB 스키마 초기 설정을 위한 파일로 환경에 따라 분기하여 관리될 수 있도록 구성하였습니다.
@@ -27,7 +27,7 @@
 <summary>ER 다이어그램</summary>
 <div markdown="1">
 
-![ERDiagram.png](img-erd.png)
+![ERDiagram.png](images/img-erd.png)
 
 </div>
 </details>
@@ -56,10 +56,10 @@
 <div markdown="1">
 
 #### 강의 관련 API
-![img-lecture-result.png](img-lecture-result.png)
+![img-lecture-result.png](images/img-lecture-result.png)
 
 #### 학생 관련 API
-![img-student-result.png](img-student-result.png)
+![img-student-result.png](images/img-student-result.png)
 
 </div>
 </details>
