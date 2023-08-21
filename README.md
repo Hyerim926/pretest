@@ -1,4 +1,4 @@
-# inflab-pretest
+# pretest
 ### 프로젝트 실행방법
 
 1. `npm install` 명령어로 프로젝트의 라이브러리들을 설치해줍니다.
